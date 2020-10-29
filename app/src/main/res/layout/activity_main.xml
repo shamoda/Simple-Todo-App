@@ -9,17 +9,11 @@
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/no_of_todos"
         />
     
-    <LinearLayout
-        android:id="@+id/linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/list_view"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        >
+
         
         <TextView
             android:id="@+id/no_of_todos"
@@ -27,6 +21,10 @@
             android:layout_height="wrap_content"
             android:text="You have x todos"
             android:textSize="18sp"
+            android:layout_alignParentBottom="true"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:paddingStart="20dp"
             />
 
         <Button
@@ -34,11 +32,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Todo"
-            android:textSize="18sp"
-            android:layout_marginStart="100dp"
-            android:hapticFeedbackEnabled="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentEnd="true"
             />
-        
-    </LinearLayout>
+
 
 </RelativeLayout>

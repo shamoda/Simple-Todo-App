@@ -10,12 +10,17 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private ListView list;
     private TextView count;
     private Button add;
     Context context;
+    private DBHelper dbHelper;
+    private List<ToDo> toDos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         count = findViewById(R.id.no_of_todos);
         add = findViewById(R.id.add_todo);
         context = this;
+        dbHelper = new DBHelper(context);
+        toDos = new ArrayList<>();
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(context, AddTodoActivity.class));
             }
         });
+
+        count.setText("You have " +dbHelper.countTodo()+ " Todos");
+
+        toDos = dbHelper.getAllTodos();
+        TodoAdapter todoAdapter = new TodoAdapter(context, R.layout.single_todo, toDos);
+        list.setAdapter(todoAdapter);
 
     }
 }
