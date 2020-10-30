@@ -101,4 +101,49 @@ public class DBHelper extends SQLiteOpenHelper {
         return toDos;
     }
 
+
+    public void deleteTodo(int id){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        sqLiteDatabase.delete(TABLE_NAME, ID+" =?", new String[]{String.valueOf(id)});
+        sqLiteDatabase.close();
+    }
+
+
+    public ToDo getTodo(int id){
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.query(TABLE_NAME, new String[]{ID, TITLE, DESCRIPTION, STARTED, FINISHED}, ID + "= ?", new String[]{String.valueOf(id)}, null, null, null);
+        ToDo toDo;
+        if (cursor != null){
+            cursor.moveToFirst();
+            toDo = new ToDo(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getLong(3),
+                    cursor.getLong(4)
+            );
+            return toDo;
+        }
+        return null;
+    }
+
+
+    public int updateTodo(ToDo toDo){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(TITLE, toDo.getTitle());
+        contentValues.put(DESCRIPTION, toDo.getDescription());
+        contentValues.put(STARTED, toDo.getStarted());
+        contentValues.put(FINISHED, toDo.getFinished());
+
+        int status = sqLiteDatabase.update(TABLE_NAME, contentValues, ID+ " =?", new String[]{String.valueOf(toDo.getId())} );
+
+        sqLiteDatabase.close();
+
+        return status;
+    }
+
+
+
 }

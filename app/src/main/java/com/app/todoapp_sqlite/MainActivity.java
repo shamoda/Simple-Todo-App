@@ -1,11 +1,14 @@
 package com.app.todoapp_sqlite;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +49,44 @@ public class MainActivity extends AppCompatActivity {
         toDos = dbHelper.getAllTodos();
         TodoAdapter todoAdapter = new TodoAdapter(context, R.layout.single_todo, toDos);
         list.setAdapter(todoAdapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                final ToDo toDo = toDos.get(i);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(toDo.getTitle());
+                builder.setMessage(toDo.getDescription());
+                builder.setPositiveButton("Finished", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        toDo.setFinished(System.currentTimeMillis());
+                        dbHelper.updateTodo(toDo);
+                        startActivity(new Intent(context, MainActivity.class));
+                    }
+                });
+                builder.setNegativeButton("Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(context, EditTodoActivity.class);
+                        intent.putExtra("id", String.valueOf(toDo.getId()));
+                        startActivity(intent);
+                    }
+                });
+
+                builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dbHelper.deleteTodo(toDo.getId());
+                        startActivity(new Intent(context, MainActivity.class));
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
     }
 }
